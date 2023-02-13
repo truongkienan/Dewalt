@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Ward>
+@{
+    ViewBag.Title = "Ward";
+}
+<button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
+  Import
+</button>
+
+<div class="card mb-4 mt-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Wards
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+    <table id="dataTable" class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>District</th>
+            <th>Name</th>
+            <th>Type</th>            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.WardId</td>
+                <td>@item.DistrictId</td>
+                <td>@item.WardName</td>
+                <td>@item.WardType</td>                
+            </tr>
+        }
+    </tbody>
+</table> 
+</div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form method="post" enctype="multipart/form-data" action="/dashboard/ward/import" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+            <label>Excel Import</label>    
+            <input type="file" name="f" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary">Import</button>
+      </div>
+    </form>
+  </div>
+</div>
+ 
+

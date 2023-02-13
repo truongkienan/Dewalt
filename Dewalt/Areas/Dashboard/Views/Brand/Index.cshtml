@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Brand>
+    @{
+    ViewBag.Title = "Brand";
+}
+<button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
+  Create
+</button>
+@if (TempData["msg"]!=null)
+{
+    <p class="alert-success">@TempData["msg"]</p>
+}
+
+<div class="card mb-4 mt-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Brands
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+    <form method="post" action="/dashboard/brand/DeleteMultiple">
+    <table id="dataTable" class="table table-border">
+        <thead class="table-dark">
+            <tr>
+                <th>
+                    <button class="btn btn-dark">
+                        <i class="fas fa-trash fa-fw"></i>
+                    </button>
+                </th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Edit</th>                
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Brand item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="arr" value="@item.BrandId">
+                    </td>
+                    <td>@item.BrandId</td>
+                    <td>@item.BrandName</td>
+                    <td>@item.Description</td>
+                    <td>
+                        @if(!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="/images/brands/@item.ImageUrl" width="150">           
+                        }                                         
+                    </td>
+                    <td>
+                        <a href="/dashboard/brand/edit/@item.BrandId">Edit</a>                        
+                        </td>
+                    <td><a href="/dashboard/brand/Delete/@item.BrandId">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+</div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" method="post" action="/dashboard/brand/create" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Brand</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+     <div class="form-group">
+        <label>Name</label>
+        <div>
+            <input class="form-control" type="text" name="brandName" />
+        </div>
+    </div>
+    <div class="form-group">
+        <lable>Description</lable>
+        <div>
+            <textarea class="form-control" name="description"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <lable>Image</lable>
+        <div class="custom-file">
+            <input type="file" name="f" class="custom-file-input" id="validatedCustomFile"/>
+             <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        </div>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+

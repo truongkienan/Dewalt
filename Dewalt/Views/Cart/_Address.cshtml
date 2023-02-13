@@ -1,0 +1,118 @@
+﻿@model Address
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#myAddress">
+  Add Address
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myAddress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Address</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label asp-for="ProvinceId">Province</label>
+                        </div>
+                        <div class="col-md-10">
+                            <select asp-for="ProvinceId" asp-items="@ViewBag.provinces" form="fmAddress" class="form-control form-control-select2">         
+                            </select>
+                        </div>
+                    </div>       
+                </div>
+                <div class="form-group ">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label asp-for="DistrictId">District</label>
+                        </div>
+                        <div class="col-md-10">
+                            <select asp-for="DistrictId" form="fmAddress" class="form-control form-control-select2">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                          <div class="col-md-2">
+                              <label  asp-for="WardId">Ward</label>
+                          </div>
+                          <div class="col-md-10">
+                              <select  asp-for="WardId" form="fmAddress" class="form-control form-control-select2">
+                              </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label asp-for="AddressName" >Address</label>
+                        </div>
+                        <div class="col-md-10">       
+                            <input type="text" class="form-control" asp-for="AddressName" form="fmAddress">
+                            <span asp-validation-for="AddressName"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="phone">Phone</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" asp-for="Phone" form="fmAddress">
+                            <span asp-validation-for="Phone"></span>
+                        </div>
+                    </div>
+                    
+                </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button form="fmAddress" class="btn btn-primary">Save</button>
+          </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+getDistricts($('select[name="ProvinceId"]').val());
+
+function getDistricts(pid){
+    var o = { id: pid };
+    $.post('/cart/district', o, (d) => {
+        console.log(d);
+        $('select[name="DistrictId"]').html(null);
+        for (var i in d) {
+            $('select[name="DistrictId"]').append(`<option value="${d[i]['districtId']}">${d[i]['districtName']}</option>`);
+        }
+        getWards($('select[name="DistrictId"]').val());
+    });    
+}
+
+function getWards(did) {
+     var o = { id: did };
+        $.post('/cart/ward', o, (d) => {
+            console.log(d);
+            $('select[name="WardId"]').html(null);
+            for (var i in d) {
+                $('select[name="WardId"]').append(`<option value="${d[i]['wardId']}">${d[i]['wardName']}</option>`);
+            }
+        });
+}
+
+$('select[name="ProvinceId"]').change(function(){    
+    getDistricts($(this).val());
+})
+
+$('select[name="DistrictId"]').change(function(){    
+    getWards($(this).val());
+})
+
+</script>

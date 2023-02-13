@@ -1,0 +1,80 @@
+﻿@using Dewalt       
+<div class="site__body">
+            <div class="page-header">
+                <div class="page-header__container container">
+                    <div class="page-header__breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html">Home</a>
+                                    <svg class="breadcrumb-arrow" width="6px" height="9px">
+                                        <use xlink:href="images/sprite.svg#arrow-rounded-right-6x9"></use>
+                                    </svg>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="">Breadcrumb</a>
+                                    <svg class="breadcrumb-arrow" width="6px" height="9px">
+                                        <use xlink:href="images/sprite.svg#arrow-rounded-right-6x9"></use>
+                                    </svg>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Screwdrivers</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="page-header__title">
+                        <h1>@ViewBag.title</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="block">
+                            <div class="products-view">
+                                <div class="products-view__options">
+                                    <partial name="_ViewOptions"/>                                         
+                                </div>
+                                <div class="products-view__list products-list" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
+                                    <partial name="_Products" />                      
+                                </div>              
+                                <div class="products-view__pagination">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item @(ViewBag.page >1?"":"disabled")">
+                                            <a class="page-link page-link--with-arrow" href="/product/search/@(ViewBag.page - 1 == 0 ? 1:ViewBag.page - 1)/@ViewBag.size?q=@ViewBag.title" aria-label="Previous">
+                                                <svg class="page-link__arrow page-link__arrow--left" aria-hidden="true" width="8px" height="13px">
+                                                    <use xlink:href="/images/sprite.svg#arrow-rounded-left-8x13"></use>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                     @for (int i = 1; i <= @ViewBag.totalPage; i++)
+                                    {
+                                        <li class="page-item" v="@i">                
+                                            <a class="page-link" href="/product/search/@i/@ViewBag.size?q=@ViewBag.title">@i</a>
+                                        </li>
+                                    }                                              
+                                       <li class="page-item @(ViewBag.page < ViewBag.totalPage?"":"disabled")">
+                                            <a class="page-link page-link--with-arrow" href="/product/search/@(ViewBag.page+1>ViewBag.totalPage?ViewBag.totalpage:ViewBag.page+1)/@ViewBag.size?q=@ViewBag.title" aria-label="Next">
+                                                <svg class="page-link__arrow page-link__arrow--right" aria-hidden="true" width="8px" height="13px">
+                                                    <use xlink:href="/images/sprite.svg#arrow-rounded-right-8x13"></use>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+<script>
+    $($('ul.pagination li')[@ViewContext.GetPage("p")]).addClass('active');
+        $("#slPageSize").change(function () {
+        size = $(this).find("option:selected").val();
+        var url=`/product/search/@ViewBag.page/${size}?q=@ViewBag.title`;            
+            window.location.href = url;
+    });
+$("#slPageSize").val(@ViewBag.size);
+$('#total').text(@ViewBag.total);
+$('#count').text(@ViewBag.count);
+</script>

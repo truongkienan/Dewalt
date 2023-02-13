@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Member>
+@{
+    ViewBag.Title = "Member";
+}
+<div class="card mb-4 mt-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Members
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+<table id="dataTable" class="table table-bordered mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Fullname</th>
+            <th>Gender</th>
+            <th>Date Of Birth</th>
+            <th>Roles</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Member item in Model)
+        {
+            <tr>
+                <td>@item.Username</td>
+                <td>@item.Email</td>
+                <td>@item.Fullname</td>
+                <td>@item.Gender</td>
+                <td>@item.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a href="/dashboard/member/roles/@item.MemberId">Roles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+    </div>
+</div>
+

@@ -1,0 +1,19 @@
+﻿    @{
+    ViewBag.Title = "Change Password";
+}
+@model ChangeAccModel
+
+<div asp-validation-summary="All"></div>
+<form method="post">
+    <div>
+        <label>Old Password</label>
+        <input type="password" asp-for="OldPassword" />
+    </div>
+    <div>
+        <label>New Password</label>
+        <input type="password" asp-for="NewPassword" />
+    </div>
+    <div>
+        <button>Change</button>
+    </div>
+</form>

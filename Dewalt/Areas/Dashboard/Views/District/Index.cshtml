@@ -1,0 +1,38 @@
+﻿@model IEnumerable<District>
+    @{
+    ViewBag.Title = "District";
+}
+<a href="/dashboard/district/import" class="btn btn-primary mt-2">Import</a>
+
+<div class="card mb-4 mt-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Districts
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+<table id="dataTable" class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Province</th>
+            <th>Name</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.DistrictId</td>
+                <td>@item.ProvinceId</td>
+                <td>@item.DistrictName</td>
+                <td>@item.DistrictType</td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+    </div>
+</div>
+

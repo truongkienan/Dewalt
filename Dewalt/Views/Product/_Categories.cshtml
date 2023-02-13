@@ -1,0 +1,27 @@
+﻿@foreach (Category item in ViewBag.categories)
+{
+    <li class="filter-categories-alt__item" data-collapse-item>
+        <button class="filter-categories-alt__expander" data-collapse-trigger></button>
+        <a href="/product/category/@item.CategoryId">
+            @item.CategoryName
+        </a>
+        <div class="filter-categories-alt__children" data-collapse-content>            
+            <ul class="filter-categories-alt__list filter-categories-alt__list--level--2">                
+                @if (ViewBag.dictSub.ContainsKey(item.CategoryId))
+                {
+                    @for (int i=0; i<3; i++)
+                    {
+                        foreach (SubCategory sub in ViewBag.dictSub[item.CategoryId][i])
+                        {
+                            <li class="filter-categories__item filter-categories__item--child">
+                                <a href="/product/subcategory/@sub.SubCategoryId">
+                                    @sub.SubCategoryName
+                                </a>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+        </div>
+    </li>
+}

@@ -1,0 +1,36 @@
+﻿<style> li { cursor: pointer } </style>
+@model IEnumerable<Product>
+<div class="products-list__body">
+        @foreach(Product item in Model){
+            <div class="products-list__item">
+            <div class="product-card product-card--hidden-actions ">
+                <div class="product-card__badges-list">
+                    <div class="product-card__badge product-card__badge--new">New</div>
+                </div>
+                <div class="product-card__image product-image">
+                    <a href="/product/detail/@item.ProductId" class="product-image__body">
+                        <img class="product-image__img" src="/images/products/@item.ImageUrl" alt="">
+                    </a>
+                </div>
+                <div class="product-card__info">
+                    <div class="product-card__name">
+                        <a href="/product/detail/@item.ProductId">@item.ProductName</a>
+                    </div>
+                </div>
+                <div class="product-card__actions">
+                    <div class="product-card__prices">
+                        $@item.Price
+                    </div>
+                    <div class="product-card__buttons">
+                        <form method="post" action="/cart/add">
+                          <input type="hidden" value="@item.ProductId" name="productId">
+				          <input type="hidden" value="1" name="quantity">
+                          <button class="btn btn-primary product-card__addtocart" >Add To Cart</button>
+                        <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button">Add To Cart</button>        
+                        </form>                                     
+                    </div>
+                </div>
+            </div>
+        </div>   
+        }                                        
+</div>

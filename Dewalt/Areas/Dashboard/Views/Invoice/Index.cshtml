@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Invoice";
+}
+@model List<Invoice>
+<div class="card mb-4 mt-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Invoices
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+    <table id="dataTable" class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Invoice Id</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Address</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+         <tr>
+             <td>@item.InvoiceId</td>
+            <td>@item.Username</td>   
+            <td>@item.Total</td>
+            <td>@item.InvoiceDate</td>   
+            <td>@item.StatusName</td>
+            <td>@($"{item.AddressName}, {item.WardName}, {item.DistrictName}, {item.ProvinceName}")</td>
+            <td><i v="@item.InvoiceId" class="fa-solid fa-pen-to-square"></i></td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+</div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="edt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <form method="post" action="/dashboard/invoice/edit" class="modal-content">
+        <input type="hidden" name="invoiceId" />
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Invoice</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <lable>Status</lable>
+        <select name="statusId" asp-items="@ViewBag.statuses" class="mb-2"></select>
+         <table class="table table-bordered table-striped ">
+            <thead>
+                <tr>
+                    <th>Invoice Id</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody id="detail"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+    <script>        
+
+        $('.fa-pen-to-square').click(function(){                 
+            var id = $(this).attr('v');                 
+            $.post('/dashboard/invoice/detail', {id:id}, (o)=>{
+                console.log(o);
+                $('input[name="invoiceId"]').val(o.invoiceId);
+                var d = o.invoiceDetails;
+                
+                for(var i in d){
+                    var id = `<td>${d[i].invoiceId}</td>`;
+                    var name = `<td>${d[i].productName}</td>`;
+                    var quantity = `<td>${d[i].quantity}</td>`;
+                    var price = `<td>${d[i].price}</td>`;
+                    var total=`<td>${d[i].total}</td>`;
+                    var image = `<td><img src="/images/products/${d[i].imageUrl}" width="50"></td>`;
+                    var tr='<tr>' + id + name + quantity + price + total +image + '</tr>';
+                    $('#detail').html(null); 
+                    $('#detail').append(tr);                    
+                }
+                $(edt).modal('show');
+                $('select[name="statusId"]').val(o['statusId']);
+            })
+        })
+</script>

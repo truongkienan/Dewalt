@@ -1,0 +1,10 @@
+﻿<div class="products-view__list products-list" data-layout="grid-3-sidebar" data-with-features="false" data-mobile-grid-columns="2">
+    <partial name="_Products"/>     
+</div>
+<partial name="_Pagination"/>
+
+<script>
+$('#total').text(@ViewBag.total);
+$('#count').text(@ViewBag.count);
+</script>
+

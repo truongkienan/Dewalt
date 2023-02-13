@@ -1,0 +1,46 @@
+﻿<style>
+    li {
+        cursor: pointer
+    }
+</style>
+<div class="products-view__pagination">
+    <ul p="@ViewBag.page" class="pagination justify-content-center">
+        <li v="@(ViewBag.page - 1 == 0 ? 1:ViewBag.page - 1)" class="page-item @(ViewBag.page >1?"":"disabled")">
+            <a class="page-link page-link--with-arrow" href="javascript:void(0)" aria-label="Previous">
+                <svg class="page-link__arrow page-link__arrow--left" aria-hidden="true" width="8px" height="13px">
+                    <use xlink:href="~/images/sprite.svg#arrow-rounded-left-8x13"></use>
+                </svg>
+            </a>
+        </li>
+
+        @for (int i = 1; i <= @ViewBag.totalPage; i++)
+        {
+            <li class="page-item" v="@i">                
+                <a class="page-link" href="javascript:void(0)">@i</a>
+            </li>
+        }
+
+        <li v="@(ViewBag.page+1>ViewBag.totalPage?ViewBag.totalpage:ViewBag.page+1)" class="page-item @(ViewBag.page < ViewBag.totalPage?"":"disabled")">
+            <a class="page-link page-link--with-arrow" href="javascript:void(0)" aria-label="Next">
+                <svg class="page-link__arrow page-link__arrow--right" aria-hidden="true" width="8px" height="13px">
+                    <use xlink:href="~/images/sprite.svg#arrow-rounded-right-8x13"></use>
+                </svg>
+            </a>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    var p = $('ul.pagination').attr('p');
+    $($('ul.pagination li')[p]).addClass('active');
+    $('ul.pagination li').click(function () {            
+        getProducts(
+            $('#action').val(),
+            $('#urlId').val(),
+            $(this).attr('v'),
+            $("#slPageSize").val(),
+            $("#slOrder").val(),
+            $('.filter-price__min-value').text(),
+            $('.filter-price__max-value').text()
+        );
+    });
+</script>

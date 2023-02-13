@@ -1,0 +1,127 @@
+﻿@model Tuple<IEnumerable<Cart>, decimal>      
+@{
+    ViewBag.Title = "Cart";
+}
+<div class="site__body">
+            <div class="page-header">
+                <div class="page-header__container container">
+                    <div class="page-header__breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html">Home</a>
+                                    <svg class="breadcrumb-arrow" width="6px" height="9px">
+                                        <use xlink:href="images/sprite.svg#arrow-rounded-right-6x9"></use>
+                                    </svg>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="">Breadcrumb</a>
+                                    <svg class="breadcrumb-arrow" width="6px" height="9px">
+                                        <use xlink:href="images/sprite.svg#arrow-rounded-right-6x9"></use>
+                                    </svg>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="page-header__title">
+                        <h1>Shopping Cart</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="cart block">
+                <div class="container">
+                    <table class="cart__table cart-table">
+                        <thead class="cart-table__head">
+                            <tr class="cart-table__row">
+                                <th class="cart-table__column cart-table__column--image">Image</th>
+                                <th class="cart-table__column cart-table__column--product">Product</th>
+                                <th class="cart-table__column cart-table__column--price">Price</th>
+                                <th class="cart-table__column cart-table__column--quantity">Quantity</th>
+                                <th class="cart-table__column cart-table__column--total">Total</th>
+                                <th class="cart-table__column cart-table__column--remove"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="cart-table__body">
+                            @foreach(Cart item in Model.Item1)
+                            {
+                            <tr class="cart-table__row" v="@item.ProductId">
+                                <td class="cart-table__column cart-table__column--image">
+                                    <div class="product-image">
+                                        <a href="" class="product-image__body">
+                                            <img class="product-image__img" src="/images/products/@item.ImageUrl" alt="">
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="cart-table__column cart-table__column--product">
+                                    <a href="" class="cart-table__product-name">@item.ProductName</a>
+                                    <ul class="cart-table__options">
+                                        <li>Color: Yellow</li>
+                                        <li>Material: Aluminium</li>
+                                    </ul>
+                                </td>
+                                <td class="cart-table__column cart-table__column--price" data-title="Price">$@item.Price</td>
+                                <td class="cart-table__column cart-table__column--quantity" data-title="Quantity">
+                                    <div class="input-number">
+                                        <input v="@item.ProductId" class="form-control input-number__input" type="number" min="1" value="@item.Quantity">
+                                        <div class="input-number__add"></div>
+                                        <div class="input-number__sub"></div>
+                                    </div>
+                                </td>
+                                <td class="cart-table__column cart-table__column--total" data-title="Total">$@item.Price</td>
+                                <td class="cart-table__column cart-table__column--remove">
+                                    <button type="button" class="btn btn-light btn-sm btn-svg-icon close1">
+                                        <svg width="12px" height="12px">
+                                            <use xlink:href="images/sprite.svg#cross-12"></use>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="cart__actions d-flex flex-row-reverse">       
+                        <div class="cart__buttons">
+                            <a href="/" class="btn btn-light">Continue Shopping</a>
+                            <a href="/cart/checkout" class="btn btn-primary cart__update-button">Checkout</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        				<script>$(document).ready(function(c) {
+					$('.close1').on('click', function(c){
+						if(confirm('Are you sure delete?')){
+						$(this).closest('tr.cart-table__row').fadeOut('slow', function(c){
+                            var pid = $(this).attr('v');
+                            $.post('/cart/delete', { ProductId: pid }, (d) => {
+                                console.log(d);
+                            });
+							$(this).remove();
+						});   	
+						}						                     
+						});	  
+					});
+			   </script>
+        	<!--quantity-->
+			<script>
+function save(qty, pid) {    
+	$.post('/cart/edit',{'quantity':qty, 'productId':pid}, (d)=>{
+		console.log(d);
+	});
+}
+
+$('.input-number__add').on('click', function(){
+	var divUpd = $(this).parent().find('.input-number__input'), newVal = parseInt(divUpd.val(), 10);
+	save(newVal, divUpd.attr('v'))
+	divUpd.val(newVal);
+});
+
+$('.input-number__sub').on('click', function(){
+	var divUpd = $(this).parent().find('.input-number__input'), newVal = parseInt(divUpd.val(), 10);
+	save(newVal, divUpd.attr('v'))
+	if(newVal>=1) divUpd.val(newVal);
+});
+</script>
+			<!--quantity-->

@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewBag.Title = "Product";
+}
+<div class="d-flex justify-content-between mt-2">
+    <a href="/dashboard/product/create" class="btn btn-primary ">Create</a>
+
+<form method="post" action="/dashboard/product/RemoveVietnameseTone" >
+    <button class="btn btn-primary">Remove Vietnamese Tone Product Name</button>    
+</form>
+</div>
+
+
+@if (TempData["msg"]!=null)
+{
+    <p class="alert-success">@TempData["msg"]</p>
+}
+
+<div class="modal" id="modal-del" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <form method="post" action="/dashboard/product/delete" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure delete</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card mb-4 mt-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Products
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+<table id="dataTable" class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Search Ansi</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Edit</th>           
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr v="@item.ProductId">
+                <td>@item.ProductName</td>
+                <td>@item.SearchAnsi</td>
+                <td>@item.BrandId</td>
+                <td>@item.CategoryId</td>
+                <td>
+                    <img src="/images/products/@item.ImageUrl" width="70">
+                    </td>
+                <td>@item.Price</td>
+                <td>                    
+                    <a href="/dashboard/Product/edit/@item.ProductId">Edit</a>
+                </td>               
+                <td>
+                    <span onclick="del(@item.ProductId)">Delete</span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+    </div>
+</div>
+
+<script>    
+    function del(id){
+        $('form.modal-content').attr('action', `/dashboard/product/delete/${id}`);
+        $('#modal-del').modal('show');
+    }    
+</script>

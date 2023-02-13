@@ -1,0 +1,75 @@
+﻿@{
+    Layout = "_LayoutAuth";
+    ViewBag.Title = "Register";
+}
+
+@model Member
+
+<div class="card shadow-lg border-0 rounded-lg mt-3 mb-3">
+    <div class="card-header"><h3 class="text-center font-weight-light">Register</h3></div>
+    <div class="card-body">
+    <div asp-validation-summary="ModelOnly"></div>
+        <form method="post">
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="small mb-1" asp-for="Fullname">Fullname</label>
+                        <input class="form-control py-4" asp-for="Fullname" type="text" placeholder="Fullname" />
+                        <span asp-validation-for="Fullname"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select asp-for="Gender">
+                            <option value="m">Male</option>
+                            <option value="f">Female</option>
+                            <option value="u">Undefined</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="small mb-1" asp-for="DateOfBirth">Date Of Birth</label>
+                <input class="form-control" asp-for="DateOfBirth" type="date" aria-describedby="emailHelp"  />
+                <span asp-validation-for="DateOfBirth"></span>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="small mb-1" asp-for="Email">Email</label>
+                        <input class="form-control py-4" asp-for="Email" type="email" aria-describedby="emailHelp"  placeholder="Enter email address" />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="small mb-1" asp-for="Username">Username</label>
+                        <input class="form-control py-4" asp-for="Username" type="text" aria-describedby="emailHelp"  placeholder="Enter email username" />
+                        <span asp-validation-for="Username"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="small mb-1" asp-for="Password">Password</label>
+                        <input class="form-control py-4" asp-for="Password" type="password" placeholder="Enter password" />
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                </div>
+                          <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="small mb-1" for="inputConfirmPassword">Confirm Password</label>
+                        <input class="form-control py-4" id="inputConfirmPassword" type="password" placeholder="Confirm password" />
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-4 mb-0">
+                    <button class="btn btn-primary btn-block">Create Account</button>                
+                </div>
+        </form>
+    </div>
+    <div class="card-footer text-center">
+        <div class="small"><a href="/dashboard/auth/login">Have an account? Go to login</a></div>
+    </div>
+</div>

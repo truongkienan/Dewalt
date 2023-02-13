@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Product";
+}
+@model Product
+<div class="card mb-4 mt-4">
+    <div class="card-header">
+        <i class="fas fa-edit mr-1"></i>
+        Edit
+    </div>
+    <div class="card-body">
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Brand</label>
+        <div>
+            <select class="form-control" name="brandId">
+                @foreach (Brand item in ViewBag.brands)
+                {
+                    <option value="@item.BrandId">@item.BrandName</option>
+                }
+            </select>
+        </div>
+    </div>
+        <div class="form-group">
+        <label>Status</label>
+        <div>
+            <select class="form-control" name="statusId">
+                @foreach (ProductStatus item in ViewBag.productStatus)
+                {
+                    <option value="@item.StatusId">@item.StatusName</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Category</label>
+        <div>
+            <select class="form-control" name="categoryId">
+                @foreach (Category item in ViewBag.categories)
+                {
+                    <option value="@item.CategoryId">@item.CategoryName</option>
+                }
+            </select>
+        </div>
+    </div>
+      <div class="form-group">
+        <label>Sub Category</label>
+        <div>
+            <select class="form-control" name="subCategoryId">
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Product Name</label>
+        <div>
+            <input class="form-control" type="text" name="productName" value="@Model.ProductName"/>
+        </div>
+    </div>
+        <div class="form-group">
+        <label>SKU</label>
+        <div>
+            <input class="form-control" type="text" name="productSKU" value="@Model.ProductSKU"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <div>
+            <textarea class="form-control" name="description">@Model.Description</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Price</label>
+        <div>
+            <input class="form-control" type="number" name="price" value="@Model.Price"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Image</label>
+        <div class="custom-file">
+            <img src="/images/products/@Model.ImageUrl" width="150" />
+            <input type="hidden" value="@Model.ImageUrl" name="imageUrl" />
+            <input type="file" name="f" class="custom-file-input" id="validatedCustomFile"/>
+            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary">Save Changes</button>
+    </div>
+</form>
+</div>
+    </div>
+
+<script>
+    $('select[name="brandId"]').val(@Model.BrandId);
+    $('select[name="statusId"]').val(@Model.StatusId);
+    $('select[name="categoryId"]').val(@Model.CategoryId);
+    var subCategoryId = @Model.SubCategoryId;
+</script>
+<script src="/js/product.js"></script>
+

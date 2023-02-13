@@ -1,0 +1,42 @@
+﻿@model IEnumerable<RoleChecked>
+@{
+    ViewBag.Title = "Role";
+}
+<div class="card mt-3">
+    <div class="card-header">
+        <div class="card-title">
+            @ViewBag.member.Username
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Role</th>
+                    <th>Checked</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.RoleName</td>
+                        <td>
+                            <input @(item.Checked?"checked":"") type="checkbox" value="@item.RoleId" name="c" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $('input[name="c"]').click(function(){
+        var rid=$(this).val();
+        
+        $.post('/dashboard/member/roles', {RoleId: rid, MemberId:'@ViewBag.member.MemberId'}, (d)=>{
+            console.log(d);
+        })
+    })
+</script>

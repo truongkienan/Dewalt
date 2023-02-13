@@ -1,0 +1,143 @@
+﻿@model Product
+<div class="site__body">
+            <div class="page-header">
+                <div class="page-header__container container">
+                    <div class="page-header__breadcrumb">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html">Home</a>
+                                    <svg class="breadcrumb-arrow" width="6px" height="9px">
+                                        <use xlink:href="/images/sprite.svg#arrow-rounded-right-6x9"></use>
+                                    </svg>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="">Breadcrumb</a>
+                                    <svg class="breadcrumb-arrow" width="6px" height="9px">
+                                        <use xlink:href="/images/sprite.svg#arrow-rounded-right-6x9"></use>
+                                    </svg>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Brandix Screwdriver SCREW1500ACC</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="container">
+                    <div class="product product--layout--standard" data-layout="standard">
+                        <div class="product__content">
+                            <!-- .product__gallery -->
+                            <div class="product__gallery">
+                                <div class="product-gallery">
+                                    <div class="product-gallery__featured">                        
+                                        <div class="owl-carousel" id="product-image">
+                                            <div class="product-image product-image--location--gallery">              
+                                                <a href="/images/products/@Model.ImageUrl" data-width="700" data-height="700" class="product-image__body" target="_blank">
+                                                    <img class="product-image__img" src="/images/products/@Model.ImageUrl" alt="">
+                                                </a>
+                                            </div>                                            
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+                            <!-- .product__gallery / end -->
+                            <!-- .product__info -->
+                            <div class="product__info">
+                                <h1 class="product__name">@Model.ProductName</h1>                                  
+                            </div>
+                            <!-- .product__info / end -->
+                            <!-- .product__sidebar -->
+                            <div class="product__sidebar">           
+                                <div class="product__prices">                                    
+                                    @Model.Price đ
+                                </div>
+                                <!-- .product__options -->
+                                <form method="post" action="/cart/add" class="product__options">          
+                                    <div class="form-group product__option">
+                                        <label class="product__option-label" for="product-quantity">Quantity</label>
+                                        <div class="product__actions">
+                                              <div class="product__actions-item">
+                                                    <div class="input-number product__quantity">
+                                                        <input type="hidden" value="@Model.ProductId" name="productId">
+                                                        <input id="product-quantity" name="quantity" class="input-number__input form-control form-control-lg" type="number" min="1" value="1">
+                                                        <div class="input-number__add"></div>
+                                                        <div class="input-number__sub"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="product__actions-item product__actions-item--addtocart">
+                                                    <button class="btn btn-primary btn-lg">Add to cart</button>
+                                                </div>                    
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- .product__options / end -->
+                            </div>
+                            <!-- .product__end -->
+                        </div>
+                    </div>
+                    <div class="product-tabs  product-tabs--sticky">
+                        <div class="product-tabs__list">
+                            <div class="product-tabs__list-body">
+                                <div class="product-tabs__list-container container">
+                                    <a href="#tab-description" class="product-tabs__item product-tabs__item--active">Description</a>    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-tabs__content">
+                            <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
+                                <div class="typography">
+                                    @Html.Raw(Model.Description)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- .block-products-carousel -->
+            <div class="block block-products-carousel" data-layout="grid-5" data-mobile-grid-columns="2">
+                <div class="container">
+                    <div class="block-header">
+                        <h3 class="block-header__title">Related Products</h3>
+                        <div class="block-header__divider"></div>
+                        <div class="block-header__arrows-list">
+                            <button class="block-header__arrow block-header__arrow--left" type="button">
+                                <svg width="7px" height="11px">
+                                    <use xlink:href="/images/sprite.svg#arrow-rounded-left-7x11"></use>
+                                </svg>
+                            </button>
+                            <button class="block-header__arrow block-header__arrow--right" type="button">
+                                <svg width="7px" height="11px">
+                                    <use xlink:href="/images/sprite.svg#arrow-rounded-right-7x11"></use>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-products-carousel__slider">
+                        <div class="block-products-carousel__preloader"></div>
+                        <div class="owl-carousel">
+                            @foreach (Product item in ViewBag.Products)
+                            {
+                               <div class="block-products-carousel__column">
+                                <div class="block-products-carousel__cell">
+                                    <div class="product-card product-card--hidden-actions ">                                                           
+                                        <div class="product-card__image product-image">
+                                            <a href="/home/detail/@item.ProductId" class="product-image__body">
+                                                <img class="product-image__img" src="/images/products/@item.ImageUrl" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-card__info">
+                                            <div class="product-card__name">
+                                                <a href="/home/detail/@item.ProductId">@item.ProductName</a>
+                                            </div>           
+                                        </div>                                        
+                                    </div>
+                                </div>
+                            </div> 
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- .block-products-carousel / end -->
+        </div>

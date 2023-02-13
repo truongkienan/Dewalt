@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Role>
+@{
+    ViewBag.Title = "Role";
+}
+<partial name="_Create" model="new Role()" />
+<div class="card mb-4 mt-4">
+    <div class="card-header">
+        <i class="fas fa-table mr-1"></i>
+        Roles
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+<table id="dataTable" class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.RoleId</td>
+                <td>@item.RoleName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+    </div>
+</div>
