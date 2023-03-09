@@ -13,8 +13,19 @@ namespace Dewalt.Controllers
         [ServiceFilter(typeof(CategoryFilter))]
         public IActionResult Detail(string id)
         {
-            Invoice inv = provider.Invoice.GetInvoiceById(id);
-            return View(provider.Invoice.GetInvoiceById(id));
+            try
+            {
+                Invoice inv = provider.Invoice.GetInvoiceById(id);
+                if (inv == null)
+                {
+                    return NotFound();
+                }
+                return View(inv);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

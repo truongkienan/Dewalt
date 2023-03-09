@@ -13,32 +13,59 @@ namespace Dewalt.Controllers
         }
 
         public IActionResult Index()
-        {            
-            return View(provider.Product.GetProducts());
+        {
+            try
+            {
+                return View(provider.Product.GetProducts());
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }     
 
         [ServiceFilter(typeof(CategoryFilter))]
         [ServiceFilter(typeof(CartFilter))]
         public IActionResult Detail(int id)
-        {            
-            Product obj = provider.Product.GetProductById(id);
-            ViewBag.title = obj.ProductName;
-            ViewBag.products = provider.Product.GetRelatedProducts(id, obj.CategoryId);
-            return View(obj);
+        {
+            try
+            {
+                Product obj = provider.Product.GetProductById(id);
+                if (obj==null)
+                {
+                    return NotFound();
+                }
+
+                ViewBag.title = obj.ProductName;
+                ViewBag.products = provider.Product.GetRelatedProducts(id, obj.CategoryId);
+                return View(obj);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [ServiceFilter(typeof(CartFilter))]
         [HttpGet("/product/search/{p?}/{s?}")]
         public IActionResult Search(string q, int p = 1, int s=20)
-        {            
-            IEnumerable<Product> list = provider.Product.SearchProducts(q, p, s, out int totalPage, out int total);
-            ViewBag.totalPage = totalPage;
-            ViewBag.page = p;
-            ViewBag.size = s;
-            ViewBag.title = q;
-            ViewBag.total = total;
-            ViewBag.count = list.Count();
-            return View(list);
+        {
+            try
+            {
+                IEnumerable<Product> list = provider.Product.SearchProducts(q, p, s, out int totalPage, out int total);
+                ViewBag.totalPage = totalPage;
+                ViewBag.page = p;
+                ViewBag.size = s;
+                ViewBag.title = q;
+                ViewBag.total = total;
+                ViewBag.count = list.Count();
+                return View(list);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpPost]
@@ -55,15 +82,27 @@ namespace Dewalt.Controllers
         [ServiceFilter(typeof(CategoryFilter))]
         public IActionResult Category(short id)
         {
-            Category obj = provider.Category.GetCategoryById(id);
-            ViewBag.title = obj.CategoryName;
-            List<decimal> list = provider.Product.GetPricesByCategory(id).ToList();
-            return View(list);
+            try
+            {
+                Category obj = provider.Category.GetCategoryById(id);
+                if (obj==null)
+                {
+                    return NotFound();
+                }
+                ViewBag.title = obj.CategoryName;
+                List<decimal> list = provider.Product.GetPricesByCategory(id).ToList();
+                return View(list);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
 
         [ServiceFilter(typeof(CategoryFilter))]
         public IActionResult SubCategory(short id)
-        {                        
+        {                                   
             return View(provider.Product.GetPricesBySubCategory(id));
         }
     }

@@ -22,26 +22,38 @@ namespace Dewalt.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel obj, string returnUrl = "/")
         {
-            Member member = provider.Member.Login(obj);
-            if (member != null)
+            try
             {
-                List<Claim> claims = new List<Claim>()
+                if (ModelState.IsValid)
                 {
-                    new Claim(ClaimTypes.Name, obj.Username),
-                    new Claim(ClaimTypes.Email, member.Email),
-                    new Claim(ClaimTypes.NameIdentifier, member.MemberId.ToString()),
-                };
- 
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                ClaimsPrincipal principal = new ClaimsPrincipal(claimsIdentity);
-                AuthenticationProperties properties = new AuthenticationProperties
-                {
-                    IsPersistent = true
-                };
-                await HttpContext.SignInAsync(principal, properties);
-                return Redirect(returnUrl);
+                    Member member = provider.Member.Login(obj);
+                    if (member != null)
+                    {
+                        List<Claim> claims = new List<Claim>()
+                        {
+                            new Claim(ClaimTypes.Name, obj.Username),
+                            new Claim(ClaimTypes.Email, member.Email),
+                            new Claim(ClaimTypes.NameIdentifier, member.MemberId.ToString()),
+                        };
+
+                        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        ClaimsPrincipal principal = new ClaimsPrincipal(claimsIdentity);
+                        AuthenticationProperties properties = new AuthenticationProperties
+                        {
+                            IsPersistent = true
+                        };
+                        await HttpContext.SignInAsync(principal, properties);
+                        return Redirect(returnUrl);
+                    }
+                    TempData["msg"] = "Login Failed";
+                    return View(obj);
+                }
+                return View(obj);
             }
-            return View(obj);
+            catch
+            {
+                return BadRequest();
+            }
         }
         public IActionResult AccessDenied()
         {

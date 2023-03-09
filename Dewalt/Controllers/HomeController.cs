@@ -28,24 +28,31 @@ namespace Dewalt.Controllers
         [ServiceFilter(typeof(CategoryFilter))]
         [ServiceFilter(typeof(CartFilter))]
         public IActionResult Index()
-        {            
-            IEnumerable<ProductAndFeature> productAndFeatures = provider.Product.GetProductAndFeatures();
-            Dictionary<short, List<Product>> dict = new Dictionary<short, List<Product>>();
-            foreach (var item in productAndFeatures)
+        {
+            try
             {
-                short k = item.FeatureId;
-                if (!dict.ContainsKey(k))
+                IEnumerable<ProductAndFeature> productAndFeatures = provider.Product.GetProductAndFeatures();
+                Dictionary<short, List<Product>> dict = new Dictionary<short, List<Product>>();
+                foreach (var item in productAndFeatures)
                 {
-                    dict[k] = new List<Product>();
+                    short k = item.FeatureId;
+                    if (!dict.ContainsKey(k))
+                    {
+                        dict[k] = new List<Product>();
+                    }
+                    dict[k].Add(item);
                 }
-                dict[k].Add(item);
+                ViewBag.productAndFeatures = dict;
+                ViewBag.features = provider.Feature.GetFeatures();
+                ViewBag.bestSellers = provider.Product.GetBestSellers();
+                ViewBag.newArrivals = provider.Product.GetNewArrivals();
+                ViewBag.carousels = provider.Carousel.GetCarousels();
+                return View();
             }
-            ViewBag.productAndFeatures = dict;
-            ViewBag.features = provider.Feature.GetFeatures();
-            ViewBag.bestSellers = provider.Product.GetBestSellers();
-            ViewBag.newArrivals = provider.Product.GetNewArrivals();
-            ViewBag.carousels = provider.Carousel.GetCarousels();
-            return View();
+            catch
+            {
+                return BadRequest();
+            }
         }
         [ServiceFilter(typeof(CartFilter))]
         public IActionResult Contact()
