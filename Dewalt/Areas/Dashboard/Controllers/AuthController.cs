@@ -61,39 +61,50 @@ namespace Dewalt.Areas.Dashboard.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel obj)
         {
-            Member member = provider.Member.Login(obj);
-            if (member != null)
+            if (ModelState.IsValid)
             {
-                List<Claim> claims = new List<Claim>
+                try
                 {
-                    new Claim(ClaimTypes.Name, member.Username),
-                    new Claim(ClaimTypes.NameIdentifier, member.MemberId.ToString()),
-                    new Claim(ClaimTypes.Email, member.Email),
-                    new Claim(ClaimTypes.DateOfBirth, member.DateOfBirth.ToString("dd/MM/yyyyy")),
-                    new Claim(ClaimTypes.Gender, member.Gender.ToString()),                    
-                };
-
-                IEnumerable<Role> roles = provider.Role.GetRolesByMember(member.MemberId);
-                if (roles != null)
-                {
-                    foreach (Role item in roles)
+                    Member member = provider.Member.Login(obj);
+                    if (member != null)
                     {
-                        claims.Add(new Claim(ClaimTypes.Role, item.RoleName));
+                        List<Claim> claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, member.Username),
+                            new Claim(ClaimTypes.NameIdentifier, member.MemberId.ToString()),
+                            new Claim(ClaimTypes.Email, member.Email),
+                            new Claim(ClaimTypes.DateOfBirth, member.DateOfBirth.ToString("dd/MM/yyyyy")),
+                            new Claim(ClaimTypes.Gender, member.Gender.ToString()),
+                        };
+
+                        IEnumerable<Role> roles = provider.Role.GetRolesByMember(member.MemberId);
+                        if (roles != null)
+                        {
+                            foreach (Role item in roles)
+                            {
+                                claims.Add(new Claim(ClaimTypes.Role, item.RoleName));
+                            }
+                        }
+
+                        ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+
+                        AuthenticationProperties properties = new AuthenticationProperties
+                        {
+                            IsPersistent = obj.Remember
+                        };
+
+                        await HttpContext.SignInAsync(principal, properties);
+                        return Redirect("/dashboard");
                     }
+                    ModelState.AddModelError(String.Empty, "Login Failed");
+                    return View(obj);
                 }
-                
-                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
-
-                AuthenticationProperties properties = new AuthenticationProperties
+                catch
                 {
-                    IsPersistent = obj.Remember
-                };
-
-                await HttpContext.SignInAsync(principal, properties);
-                return Redirect("/dashboard");
+                    return BadRequest();
+                }
             }
-            ModelState.AddModelError(String.Empty, "Login Failed");
             return View(obj);
         }
         public IActionResult Register()

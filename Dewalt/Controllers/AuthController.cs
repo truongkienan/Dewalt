@@ -22,9 +22,9 @@ namespace Dewalt.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel obj, string returnUrl = "/")
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                try
                 {
                     Member member = provider.Member.Login(obj);
                     if (member != null)
@@ -48,12 +48,12 @@ namespace Dewalt.Controllers
                     TempData["msg"] = "Login Failed";
                     return View(obj);
                 }
-                return View(obj);
+                catch
+                {
+                    return BadRequest();
+                }
             }
-            catch
-            {
-                return BadRequest();
-            }
+            return View(obj);
         }
         public IActionResult AccessDenied()
         {
